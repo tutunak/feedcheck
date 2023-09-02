@@ -37,3 +37,14 @@ jobs:
           # skip cache because of flaky behaviors
           skip-build-cache: true
           skip-pkg-cache: true
+
+  build:
+    runs-on: ubuntu-latest
+    needs:
+      - Dockerfile
+      - Go
+    steps:
+      - uses: actions/checkout@v3
+      - name: podman build
+        run: |
+          podman build -t ${{ github.repository }}:${{ github.sha }} .
