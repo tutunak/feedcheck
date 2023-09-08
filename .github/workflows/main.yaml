@@ -25,9 +25,8 @@ jobs:
         uses: actions/setup-go@v4
         with:
           go-version: ${{ env.GO_VERSION }}
-      - name: check go version
-        run: |
-          go version
+      - name: test with coverage
+        run: go test -coverprofile=coverage.txt --covermode=atomic
       - name: Check go mod
         run: |
           go mod tidy
