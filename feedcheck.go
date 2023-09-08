@@ -10,7 +10,7 @@ func lastModified(url string) (string, error) {
 	// Check the Last-Modified header
 	resp, err := http.Head(url)
 	if err != nil {
-		log.Fatal(err)
+		return "", err
 	}
 	defer func() {
 		_ = resp.Body.Close()
