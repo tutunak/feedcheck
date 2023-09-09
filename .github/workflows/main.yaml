@@ -49,19 +49,15 @@ jobs:
       - Go
     steps:
       - uses: actions/checkout@v3
-      - name: Build Image
-        id: build_image
-        uses: redhat-actions/buildah-build@v2
+      - name: Log in to ghcr.io
+        uses: redhat-actions/podman-login@v1
         with:
-          image: ${{ github.repository }}
-          tags: ${{ github.sha }}
-          oci: true
-      - name: Push To ghcr.io
-        id: push-to-quay
-        uses: redhat-actions/push-to-registry@v2
-        with:
-          image: ghcr.io/${{ github.repository }}:${{ github.sha }}
-          registry: ghcr.io/${{ github.repository_owner }}
-          tags: ${{ github.sha }}
           username: ${{ github.actor }}
-          password: ${{ github.token }}
+          password: ${{ github.actor }}
+          registry: ghcr.io/${{ github.repository_owner }}
+      - name: podman build
+        run: |
+          podman build -t ghcr.io/${{ github.repository }}:${{ github.sha }} .
+      - name: podman push
+        run: |
+          podman push ghcr.io/${{ github.repository }}:${{ github.sha }}
